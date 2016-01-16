@@ -33,11 +33,7 @@ class Observer
             /**
              * @var NodeCategory $parent
              */
-<<<<<<< HEAD
             $parent = $model->findOrFail($model->parent);
-=======
-            $parent = $model->firstOrFail($model->parent);
->>>>>>> d8b4c370307da259eaa7bfb0187636a235df813c
             $model->node = $parent->node . $model->id . self::SEPARATOR;
             $model->level = $parent->level + 1;
         } else {
@@ -68,7 +64,6 @@ class Observer
 
     public function updated(NodeCategory $model)
     {
-
         if ($model->isDirty('parent')) {
             /**
              * 同步Original数据，是為了清除parent的dirty狀態
@@ -83,7 +78,7 @@ class Observer
                 /**
                  * @var NodeCategory $parent
                  */
-                $parent = $this->find($model->parent);
+                $parent = $model->find($model->parent);
 
                 $model->node = $parent->node . $model->id . self::SEPARATOR;
 
