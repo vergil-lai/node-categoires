@@ -57,43 +57,43 @@ Node categories model and observer for laravel 5
     $parent1 = new Category();
     $parent1->name = 'Parent 1';
     $parent1->save();
-    
-    $child1 = new Category();
-    $child1->parent = $parent1->id;     //把parent字段设置为上级分类的id
-    $child1->name = 'Child 1';
-    $child1->save();
-    
+
     $parent2 = new Category();
     $parent2->name = 'Parent 2';
     $parent2->save();
-    
+
     $parent3 = new Category();
     $parent3->name = 'Parent 3';
     $parent3->save();
-    
+
     $parent4 = new Category();
     $parent4->name = 'Parent 4';
     $parent4->save();
-    
+
     $parent5 = new Category();
     $parent5->name = 'Parent 5';
     $parent5->save();
-    
+
     $child1 = new Category();
     $child1->parent = $parent1->id;     //把parent字段设置为上级分类的id
     $child1->name = 'Child 1';
     $child1->save();
-    
+
     $child2 = new Category();
     $child2->parent = $parent1->id;
     $child2->name = 'Child 2';
     $child2->save();
-    
+
+    $child3 = new Category();
+    $child3->parent = $parent1->id;
+    $child3->name = 'Child 3';
+    $child3->save();
+
     $grandchild1 = new Category();
     $grandchild1->parent = $child1->id;
     $grandchild1->name = 'Grandchild 1';
     $grandchild1->save();
-    
+
     $grandchild2 = new Category();
     $grandchild2->parent = $child1->id;
     $grandchild2->name = 'Grandchild 2';
@@ -106,21 +106,21 @@ Node categories model and observer for laravel 5
     | id | parent | level | name         | node     |
     +----+--------+-------+--------------+----------+
     |  1 |      0 |     1 | Parent 1     | ,1,      |
-    |  2 |      1 |     2 | Child 1      | ,1,2,    |
-    |  3 |      0 |     1 | Parent 2     | ,3,      |
-    |  4 |      0 |     1 | Parent 3     | ,4,      |
-    |  5 |      0 |     1 | Parent 4     | ,5,      |
-    |  6 |      0 |     1 | Parent 5     | ,6,      |
-    |  7 |      1 |     2 | Child 1      | ,1,7,    |
-    |  8 |      1 |     2 | Child 2      | ,1,8,    |
-    |  9 |      7 |     3 | Grandchild 1 | ,1,7,9,  |
-    | 10 |      7 |     3 | Grandchild 2 | ,1,7,10, |
+    |  2 |      0 |     1 | Parent 2     | ,2,      |
+    |  3 |      0 |     1 | Parent 3     | ,3,      |
+    |  4 |      0 |     1 | Parent 4     | ,4,      |
+    |  5 |      0 |     1 | Parent 5     | ,5,      |
+    |  6 |      1 |     2 | Child 1      | ,1,6,    |
+    |  7 |      1 |     2 | Child 2      | ,1,7,    |
+    |  8 |      1 |     2 | Child 3      | ,1,8,    |
+    |  9 |      6 |     3 | Grandchild 1 | ,1,6,9,  |
+    | 10 |      6 |     3 | Grandchild 2 | ,1,6,10, |
     +----+--------+-------+--------------+----------+
         
 
 ## Update parent
 
-    $child1 = Category::find(7);
+    $child1 = Category::find(6);
     $child1->parent = 4;        //修改为id为4的子类
     $child1->save();
 
@@ -130,13 +130,44 @@ Node categories model and observer for laravel 5
     | id | parent | level | name         | node     |
     +----+--------+-------+--------------+----------+
     |  1 |      0 |     1 | Parent 1     | ,1,      |
-    |  2 |      1 |     2 | Child 1      | ,1,2,    |
-    |  3 |      0 |     1 | Parent 2     | ,3,      |
-    |  4 |      0 |     1 | Parent 3     | ,4,      |
-    |  5 |      0 |     1 | Parent 4     | ,5,      |
-    |  6 |      0 |     1 | Parent 5     | ,6,      |
-    |  7 |      4 |     2 | Child 1      | ,4,7,    |
-    |  8 |      1 |     2 | Child 2      | ,1,8,    |
-    |  9 |      7 |     4 | Grandchild 1 | ,4,7,9,  |
-    | 10 |      7 |     4 | Grandchild 2 | ,4,7,10, |
+    |  2 |      0 |     1 | Parent 2     | ,2,      |
+    |  3 |      0 |     1 | Parent 3     | ,3,      |
+    |  4 |      0 |     1 | Parent 4     | ,4,      |
+    |  5 |      0 |     1 | Parent 5     | ,5,      |
+    |  6 |      4 |     2 | Child 1      | ,4,6,    |
+    |  7 |      1 |     2 | Child 2      | ,1,7,    |
+    |  8 |      1 |     2 | Child 3      | ,1,8,    |
+    |  9 |      6 |     4 | Grandchild 1 | ,4,6,9,  |
+    | 10 |      6 |     4 | Grandchild 2 | ,4,6,10, |
     +----+--------+-------+--------------+----------+
+    
+    
+## Delete
+
+    $parent4 = Category::find(4);
+    $parent4->delete();
+    
+结果：
+    
+    +----+--------+-------+----------+-------+
+    | id | parent | level | name     | node  |
+    +----+--------+-------+----------+-------+
+    |  1 |      0 |     1 | Parent 1 | ,1,   |
+    |  2 |      0 |     1 | Parent 2 | ,2,   |
+    |  3 |      0 |     1 | Parent 3 | ,3,   |
+    |  5 |      0 |     1 | Parent 5 | ,5,   |
+    |  7 |      1 |     2 | Child 2  | ,1,7, |
+    |  8 |      1 |     2 | Child 3  | ,1,8, |
+    +----+--------+-------+----------+-------+
+    
+
+
+# Method
+
+public \Illuminate\Database\Eloquent\Collection NodeCategory::children(void)
+
+获取所有子分类
+
+    $parent1 = Category::find(1);
+    dd($parent1->children());
+    
