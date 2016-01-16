@@ -1,0 +1,22 @@
+{
+    "name": "vergil-lai/node-categories",
+    "description": "Node categories model and observer for laravel 5",
+    "keywords": ["category","laravel"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Vergil",
+            "email": "vergil@vip.163.com",
+            "homepage": "http://vergil.cn"
+        }
+    ],
+    "require": {
+        "php": ">=5.5.9"
+    },
+    "autoload": {
+        "psr-4": {
+            "VergilLai\\NodeCategories\\": "src/"
+        }
+    }
+
+}
