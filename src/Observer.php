@@ -33,7 +33,11 @@ class Observer
             /**
              * @var NodeCategory $parent
              */
+<<<<<<< HEAD
             $parent = $model->findOrFail($model->parent);
+=======
+            $parent = $model->firstOrFail($model->parent);
+>>>>>>> d8b4c370307da259eaa7bfb0187636a235df813c
             $model->node = $parent->node . $model->id . self::SEPARATOR;
             $model->level = $parent->level + 1;
         } else {
