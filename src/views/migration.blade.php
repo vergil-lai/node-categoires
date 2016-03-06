@@ -3,7 +3,8 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCategoriesTable extends Migration {
+class {{$className}} extends Migration
+{
 
     /**
      * Run the migrations.
@@ -13,14 +14,20 @@ class CreateCategoriesTable extends Migration {
     public function up()
     {
         Schema::create('{{$table }}', function(Blueprint $table) {
-        $table->increments('id');
-        $table->integer('parent')->unsigned();
-        $table->tinyInteger('level')->unsigned();
-        $table->string('name', 60);
-        $table->string('node', 1024)->default('');
+            $table->increments('id');
+            $table->unsignedInteger('parent_id');
+            $table->unsignedTinyInteger('level');
+            $table->string('name', 80);
+            $table->string('node', 1024);
 
-        $table->timestamps();
-        $table->index('parent');
+            $table->timestamps();
+            @if($softDelete)
+            $table->softDeletes();
+            @endif
+
+            $table->index('parent_id');
+            $table->index('name');
+            $table->index('node');
         });
     }
 

@@ -18,7 +18,7 @@ class MigrationCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'node-categories:migration {--table=categories : Tablename}';
+    protected $signature = 'node-categories:migration {--table=categories : Tablename} {--softDelete=false}';
 
     /**
      * The console command description.
@@ -45,11 +45,12 @@ class MigrationCommand extends Command
     public function handle()
     {
         $table = $this->option('table');
+        $softDelete = $this->option('softDelete') == 'true';
 
         if ($this->tableExists($table)) {
             $this->error('table is exists!');
         } else {
-            if ($this->createMigration($table)) {
+            if ($this->createMigration($table, $softDelete)) {
                 $this->info('Migration created successfully.');
                 Artisan::call('migrate');
             } else {
@@ -74,17 +75,17 @@ class MigrationCommand extends Command
         foreach(DB::select('SHOW TABLES') as $data) {
             $tables[] = $data->$field;
         }
-
-
         return in_array($table, $tables);
     }
 
-    private function createMigration($table)
+    private function createMigration($table, $softDelete = false)
     {
         $this->laravel->view->addNamespace(__NAMESPACE__, __DIR__ . '/views');
         $migrationFile = base_path("/database/migrations")."/".date('Y_m_d_His')."_create_{$table}_table.php";
 
-        $data = compact('table');
+        $className = 'Create'.studly_case($table).'Table';
+
+        $data = compact('table', 'className', 'softDelete');
         $output = $this->laravel->view->make(__NAMESPACE__ . '::migration')->with($data)->render();
 
         if (!is_file($migrationFile) && is_writable(dirname($migrationFile))) {
