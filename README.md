@@ -77,27 +77,27 @@ Node categories model and observer for laravel 5
     $parent5->save();
 
     $child1 = new Category();
-    $child1->parent_id = $parent1->id;     //把parent字段设置为上级分类的id
+    $child1->parent = $parent1->id;     //把parent字段设置为上级分类的id
     $child1->name = 'Child 1';
     $child1->save();
 
     $child2 = new Category();
-    $child2->parent_id = $parent1->id;
+    $child2->parent = $parent1->id;
     $child2->name = 'Child 2';
     $child2->save();
 
     $child3 = new Category();
-    $child3->parent_id = $parent1->id;
+    $child3->parent = $parent1->id;
     $child3->name = 'Child 3';
     $child3->save();
 
     $grandchild1 = new Category();
-    $grandchild1->parent_id = $child1->id;
+    $grandchild1->parent = $child1->id;
     $grandchild1->name = 'Grandchild 1';
     $grandchild1->save();
 
     $grandchild2 = new Category();
-    $grandchild2->parent_id = $child1->id;
+    $grandchild2->parent = $child1->id;
     $grandchild2->name = 'Grandchild 2';
     $grandchild2->save();
            

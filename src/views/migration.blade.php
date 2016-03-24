@@ -15,7 +15,7 @@ class {{$className}} extends Migration
     {
         Schema::create('{{$table }}', function(Blueprint $table) {
             $table->increments('id');
-            $table->unsignedInteger('parent_id');
+            $table->unsignedInteger('parent');
             $table->unsignedTinyInteger('level');
             $table->string('name', 80);
             $table->string('node', 1024);
