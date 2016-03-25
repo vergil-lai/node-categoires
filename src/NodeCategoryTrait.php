@@ -2,6 +2,7 @@
 
 namespace VergilLai\NodeCategories;
 
+use DB;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -32,5 +33,15 @@ trait NodeCategoryTrait
     public function childrens()
     {
         return $this->where('node', 'like', $this->node.'%')->get();
+    }
+
+    /**
+     * Get all parent node
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function parents()
+    {
+        return $this->where(DB::raw("LOCATE(`node`, '{$this->node}')"), '>', 0)
+            ->where('id', '<>', $this->id)->get();
     }
 }

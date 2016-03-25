@@ -77,27 +77,27 @@ Node categories model and observer for laravel 5
     $parent5->save();
 
     $child1 = new Category();
-    $child1->parent = $parent1->id;     //把parent字段设置为上级分类的id
+    $child1->parent_id = $parent1->id;     //把parent_id字段设置为上级分类的id
     $child1->name = 'Child 1';
     $child1->save();
 
     $child2 = new Category();
-    $child2->parent = $parent1->id;
+    $child2->parent_id = $parent1->id;
     $child2->name = 'Child 2';
     $child2->save();
 
     $child3 = new Category();
-    $child3->parent = $parent1->id;
+    $child3->parent_id = $parent1->id;
     $child3->name = 'Child 3';
     $child3->save();
 
     $grandchild1 = new Category();
-    $grandchild1->parent = $child1->id;
+    $grandchild1->parent_id = $child1->id;
     $grandchild1->name = 'Grandchild 1';
     $grandchild1->save();
 
     $grandchild2 = new Category();
-    $grandchild2->parent = $child1->id;
+    $grandchild2->parent_id = $child1->id;
     $grandchild2->name = 'Grandchild 2';
     $grandchild2->save();
            
@@ -123,25 +123,25 @@ Node categories model and observer for laravel 5
 ## Update parent
 
     $child1 = Category::find(6);
-    $child1->parent = 4;        //修改为id为4的子类
+    $child1->parent_id = 4;        //修改为id为4的子类
     $child1->save();
 
 结果：
 
-    +----+--------+-------+--------------+----------+
-    | id | parent | level | name         | node     |
-    +----+--------+-------+--------------+----------+
-    |  1 |      0 |     1 | Parent 1     | ,1,      |
-    |  2 |      0 |     1 | Parent 2     | ,2,      |
-    |  3 |      0 |     1 | Parent 3     | ,3,      |
-    |  4 |      0 |     1 | Parent 4     | ,4,      |
-    |  5 |      0 |     1 | Parent 5     | ,5,      |
-    |  6 |      4 |     2 | Child 1      | ,4,6,    |
-    |  7 |      1 |     2 | Child 2      | ,1,7,    |
-    |  8 |      1 |     2 | Child 3      | ,1,8,    |
-    |  9 |      6 |     4 | Grandchild 1 | ,4,6,9,  |
-    | 10 |      6 |     4 | Grandchild 2 | ,4,6,10, |
-    +----+--------+-------+--------------+----------+
+    +----+-----------+-------+--------------+----------+
+    | id | parent_id | level | name         | node     |
+    +----+-----------+-------+--------------+----------+
+    |  1 |         0 |     1 | Parent 1     | ,1,      |
+    |  2 |         0 |     1 | Parent 2     | ,2,      |
+    |  3 |         0 |     1 | Parent 3     | ,3,      |
+    |  4 |         0 |     1 | Parent 4     | ,4,      |
+    |  5 |         0 |     1 | Parent 5     | ,5,      |
+    |  6 |         4 |     2 | Child 1      | ,4,6,    |
+    |  7 |         1 |     2 | Child 2      | ,1,7,    |
+    |  8 |         1 |     2 | Child 3      | ,1,8,    |
+    |  9 |         6 |     4 | Grandchild 1 | ,4,6,9,  |
+    | 10 |         6 |     4 | Grandchild 2 | ,4,6,10, |
+    +----+-----------+-------+--------------+----------+
     
     
 ## Delete
@@ -151,30 +151,31 @@ Node categories model and observer for laravel 5
     
 结果：
     
-    +----+--------+-------+----------+-------+
-    | id | parent | level | name     | node  |
-    +----+--------+-------+----------+-------+
-    |  1 |      0 |     1 | Parent 1 | ,1,   |
-    |  2 |      0 |     1 | Parent 2 | ,2,   |
-    |  3 |      0 |     1 | Parent 3 | ,3,   |
-    |  5 |      0 |     1 | Parent 5 | ,5,   |
-    |  7 |      1 |     2 | Child 2  | ,1,7, |
-    |  8 |      1 |     2 | Child 3  | ,1,8, |
-    +----+--------+-------+----------+-------+
+    +----+-----------+-------+----------+-------+
+    | id | parent_id | level | name     | node  |
+    +----+-----------+-------+----------+-------+
+    |  1 |         0 |     1 | Parent 1 | ,1,   |
+    |  2 |         0 |     1 | Parent 2 | ,2,   |
+    |  3 |         0 |     1 | Parent 3 | ,3,   |
+    |  5 |         0 |     1 | Parent 5 | ,5,   |
+    |  7 |         1 |     2 | Child 2  | ,1,7, |
+    |  8 |         1 |     2 | Child 3  | ,1,8, |
+    +----+-----------+-------+----------+-------+
     
 
 
-# Method
+# Trait Methods
 
-public \Illuminate\Database\Eloquent\Collection NodeCategory::childrens(void)
+public \Illuminate\Database\Eloquent\Collection childrens(void)
 
 获取所有子分类
 
     $parent1 = Category::find(1);
     dd($parent1->childrens());
     
-public \Illuminate\Database\Eloquent\Collection NodeCategory::getParent(void)
+public \Illuminate\Database\Eloquent\Collection getParent(void)
 
+获取上级分类
     $child1 = Category::find(6);
     dd($child1->getParent());
     
@@ -183,3 +184,6 @@ You can use `BelongTo` Relation
     $child1 = Category::find(6);
     dd($child1->parent);
     
+public \Illuminate\Database\Eloquent\Collection parents(void)
+
+获取所有父分类
