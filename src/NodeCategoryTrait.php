@@ -44,4 +44,50 @@ trait NodeCategoryTrait
         return $this->where(DB::raw("LOCATE(`node`, '{$this->node}')"), '>', 0)
             ->where('id', '<>', $this->id)->get();
     }
+
+    /**
+     * Get tree structures
+     * @param callable $map
+     * @return array
+     */
+    public static function getTree(\Closure $map = null)
+    {
+        return (new static)->tree($map);
+    }
+
+    /**
+     * Get tree structures
+     * @param callable $map
+     * @return array
+     */
+    public function tree(\Closure $map = null)
+    {
+        /**
+         * @var \Illuminate\Database\Eloquent\Collection $collection
+         */
+        $collection = $this->get();
+
+        if (is_callable($map)) {
+            $collection->map($map);
+        }
+
+        $categories = $collection->keyBy('id')->toArray();
+
+        $nodesKey = $this->getNodesKey();
+
+        foreach($categories as $cate) {
+            $categories[$cate['parent_id']][$nodesKey][] = & $categories[$cate['id']];
+        }
+
+        return isset($categories[0][$nodesKey]) ? $categories[0][$nodesKey] : [];
+    }
+
+    /**
+     * Get the tree structures nodes key name.
+     * @return string
+     */
+    protected function getNodesKey()
+    {
+        return property_exists($this, 'nodesKey') ? $this->nodesKey : 'nodes';
+    }
 }
