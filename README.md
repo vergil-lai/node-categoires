@@ -173,9 +173,13 @@ public \Illuminate\Database\Eloquent\Collection childrens(void)
     $parent1 = Category::find(1);
     dd($parent1->childrens());
     
+---
+    
 public \Illuminate\Database\Eloquent\Collection getParent(void)
 
 获取上级分类
+
+
     $child1 = Category::find(6);
     dd($child1->getParent());
     
@@ -183,7 +187,26 @@ You can use `BelongTo` Relation
     
     $child1 = Category::find(6);
     dd($child1->parent);
-    
+
+---
+
 public \Illuminate\Database\Eloquent\Collection parents(void)
 
 获取所有父分类
+
+---
+
+public static array getTree(callable $map = null)
+
+public array tree(callable $map = null)
+
+获取树数据结构
+
+$map callable 处理原始数据的map方法，用于集合
+
+    
+    $tree = Category::getTree(function($item) {
+        $item->title = $item->name;
+    });
+    
+---
