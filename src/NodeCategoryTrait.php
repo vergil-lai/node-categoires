@@ -32,7 +32,7 @@ trait NodeCategoryTrait
      */
     public function childrens()
     {
-        return $this->where('node', 'like', $this->node.'%')->get();
+        return $this->where('node', 'like', $this->node.'%')->where('id', '<>', $this->id)->get();
     }
 
     /**
