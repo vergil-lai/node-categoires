@@ -6,6 +6,7 @@ use DB;
 use Illuminate\Database\Eloquent\Model;
 
 /**
+<<<<<<< HEAD
  * NodeCategoryTrait
  *
  * @property integer $id
@@ -16,6 +17,9 @@ use Illuminate\Database\Eloquent\Model;
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
  * @property string $deleted_at
+=======
+ * Class NodeCategoryTrait
+>>>>>>> a33e3c0a596f16f4b6662bc8cbac17e809ce9f82
  *
  * @package VergilLai\NodeCategories
  * @author Vergil <vergil@vip.163.com>
@@ -65,7 +69,6 @@ trait NodeCategoryTrait
         $parents = $this->parents();
 
         return implode($delimiter, $parents->pluck('name')->toArray()) . $delimiter . $this->name;
-
     }
 
     /**
