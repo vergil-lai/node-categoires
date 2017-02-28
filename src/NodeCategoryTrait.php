@@ -6,7 +6,6 @@ use DB;
 use Illuminate\Database\Eloquent\Model;
 
 /**
-<<<<<<< HEAD
  * NodeCategoryTrait
  *
  * @property integer $id
@@ -16,11 +15,6 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $node
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @property string $deleted_at
-=======
- * Class NodeCategoryTrait
->>>>>>> a33e3c0a596f16f4b6662bc8cbac17e809ce9f82
- *
  * @package VergilLai\NodeCategories
  * @author Vergil <vergil@vip.163.com>
  */
@@ -78,28 +72,24 @@ trait NodeCategoryTrait
      */
     public static function getTree(\Closure $map = null)
     {
-        return (new static)->tree($map);
+        return static::makeTree((new static)->get(), $map);
     }
 
     /**
      * Get tree structures
+     * @param \Illuminate\Database\Eloquent\Collection $collection
      * @param callable $map
      * @return array
      */
-    public function tree(\Closure $map = null)
+    public static function makeTree(\Illuminate\Database\Eloquent\Collection $collection, \Closure $map = null)
     {
-        /**
-         * @var \Illuminate\Database\Eloquent\Collection $collection
-         */
-        $collection = $this->get();
-
         if (is_callable($map)) {
             $collection->map($map);
         }
 
         $categories = $collection->keyBy('id')->toArray();
 
-        $nodesKey = $this->getNodesKey();
+        $nodesKey = (new static)->getNodesKey();
 
         foreach($categories as $cate) {
             $categories[$cate['parent_id']][$nodesKey][] = & $categories[$cate['id']];
